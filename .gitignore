@@ -1,0 +1,35 @@
+# Go binaries
+*.exe
+*.exe~
+*.out
+*.test
+
+# Go workspace files
+*.user
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# Dependency directories
+/vendor/
+Gopkg.lock
+
+# Go build artifacts
+bin/
+obj/
+build/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# keys
+*.csr
+*.key
+*.p12

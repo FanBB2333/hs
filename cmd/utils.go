@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os/exec"
 	"runtime"
+	"math/rand"
+	"time"
 )
 
 func openBrowser(url string) error {
@@ -25,6 +27,18 @@ func openBrowser(url string) error {
 
 func login() {
 	openBrowser("https://developer.huawei.com/consumer/en/console")
+}
+
+func generateRandomFileName(length int) string {
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	rand.Seed(time.Now().UnixNano()) // time seed
+	fileName := make([]byte, length)
+
+	for i := range fileName {
+		fileName[i] = charset[rand.Intn(len(charset))]
+	}
+
+	return string(fileName)
 }
 
 func main() {

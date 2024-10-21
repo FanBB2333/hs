@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"bytes"
 	"os/exec"
 )
 
@@ -20,6 +21,8 @@ func generateP12File(path, alias, password string) error {
 	)
 
 	output, err := cmd.CombinedOutput()
+	// print the output
+	fmt.Println(string(output))
 	if err != nil {
 		return fmt.Errorf("error generating p12 file: %v, output: %s", err, output)
 	}
@@ -27,7 +30,8 @@ func generateP12File(path, alias, password string) error {
 	return nil
 }
 
-func generateCSRFile(keystorePath, alias, outputPath string) error {
+func generateCSRFile(keystorePath, alias, outputPath, password string) error {
+	// keytool -certreq -alias "hs" -keystore "hs.p12" -storetype pkcs12 -file "hs.csr"
 	cmd := exec.Command("keytool",
 		"-certreq",
 		"-alias", alias,
@@ -35,8 +39,12 @@ func generateCSRFile(keystorePath, alias, outputPath string) error {
 		"-storetype", "pkcs12",
 		"-file", outputPath,
 	)
-
+	var inputs bytes.Buffer
+	inputs.WriteString(password)
+	cmd.Stdin = &inputs
 	output, err := cmd.CombinedOutput()
+	// print the output
+	fmt.Println(string(output))
 	if err != nil {
 		return fmt.Errorf("error generating CSR file: %v, output: %s", err, output)
 	}
@@ -45,8 +53,13 @@ func generateCSRFile(keystorePath, alias, outputPath string) error {
 }
 
 func prepareSign() {
-	generateP12File("hs.p12", "hs", "123456")
-	generateCSRFile("hs.p12", "hs", "hs.csr")
+	// assign the password to a var
+	password := "12345678"
+	p12Path := "hs.p12"
+	csrPath := "hs.csr"
+	alias := "hs"
+	generateP12File(p12Path, alias, password)
+	generateCSRFile(p12Path, alias, csrPath, password)
 }
 
 func prepareCert() {
