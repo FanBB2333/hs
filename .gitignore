@@ -33,3 +33,6 @@ Thumbs.db
 *.csr
 *.key
 *.p12
+*.cer
+*.p7b
+*.jar

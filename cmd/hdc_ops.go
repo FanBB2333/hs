@@ -44,7 +44,6 @@ func executeHDC(commands ...string) ([]string, error) {
 	return lines, nil
 }
 
-
 func checkConnection() ([]Device, error) {
 	// check the connection using hdc list targets -v
 	lines, err := executeHDC("list", "targets", "-v")
@@ -75,6 +74,15 @@ func checkConnection() ([]Device, error) {
 }
 
 func installHap(localHap string) error {
+	_, err := executeHDC("install", localHap)
+	if err != nil {
+		return err
+	}
+	// return success
+	return nil
+}
+
+func installHapOld(localHap string) error {
 	// prepare the target dir
 	tmpDir := generateRandomFileName(8)
 	remoteHap := "data/local/tmp/" + tmpDir
@@ -102,18 +110,4 @@ func installHap(localHap string) error {
 	}
 	// return success
 	return nil
-
-}
-
-func main() {
-	devices, err := checkConnection()
-	if err != nil {
-		fmt.Println("Error checking connection: ", err)
-		return
-	}
-
-	// print the connected devices
-	for _, device := range devices {
-		fmt.Println(device)
-	}
 }
