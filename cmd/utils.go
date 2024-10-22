@@ -7,31 +7,8 @@ import (
 	"math/rand"
 	"net/http"
 	"os"
-	"os/exec"
-	"runtime"
 	"time"
 )
-
-func openBrowser(url string) error {
-	var cmd *exec.Cmd
-
-	switch runtime.GOOS {
-	case "windows":
-		cmd = exec.Command("rundll32", "url.dll,FileProtocolHandler", url)
-	case "darwin": // macOS
-		cmd = exec.Command("open", url)
-	case "linux":
-		cmd = exec.Command("xdg-open", url)
-	default:
-		return fmt.Errorf("unsupported platform")
-	}
-
-	return cmd.Start() // start the command
-}
-
-func login() {
-	openBrowser("https://developer.huawei.com/consumer/cn/service/josp/agc/index.html")
-}
 
 func generateRandomFileName(length int) string {
 	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"

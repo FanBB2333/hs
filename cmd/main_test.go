@@ -32,10 +32,6 @@ func TestConn(t *testing.T) {
 	}
 }
 
-func TestLogin(t *testing.T) {
-	login()
-}
-
 func TestMain(t *testing.T) {
 	// 1. Generate a keys and CSR file
 	prepareSign()
@@ -56,4 +52,8 @@ func TestMain(t *testing.T) {
 		fmt.Println("Error installing Hap: ", err)
 		return
 	}
+}
+
+func TestRequest(t *testing.T) {
+	login()
 }
