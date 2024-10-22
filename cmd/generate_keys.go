@@ -3,7 +3,6 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"os/exec"
 )
 
@@ -55,8 +54,8 @@ func generateCSRFile(keystorePath, alias, outputPath, password string) error {
 
 func prepareSign() {
 	// assign the password to a var
-	generateP12File(p12Path, alias, password)
-	generateCSRFile(p12Path, alias, csrPath, password)
+	generateP12File(keystorePath, alias, password)
+	generateCSRFile(keystorePath, alias, csrPath, password)
 }
 
 func prepareCert() (string, string) {
@@ -78,17 +77,33 @@ func prepareCert() (string, string) {
 	return certPath, profilePath
 }
 
-func sign(unsignedPath, signedPath, keystorePath, alias, password, profile, cert string) error {
-	// downloadFile if not exists
-	// err := downloadFile("https://gitee.com/openharmony/signcenter_tool/raw/master/hapsigntool/hapsigntoolv2.jar", "hapsigntoolv2.jar")
-	if _, err := os.Stat("hap-sign-tool.jar"); os.IsNotExist(err) {
-		err := downloadFile("https://gitee.com/openharmony/developtools_hapsigner/raw/master/dist/hap-sign-tool.jar", "hap-sign-tool.jar")
-		if err != nil {
-			fmt.Println("Error downloading file: ", err)
-			return err
-		}
+// https://gitee.com/openharmony/developtools_hapsigner
+
+func signProfile() error {
+	// java -jar hap-sign-tool.jar  sign-profile -keyAlias "oh-profile1-key-v1" -signAlg "SHA256withECDSA" -mode "localSign" -profileCertFile "result\profile1.pem" -inFile "app1-profile-release.json" -keystoreFile "result\ohtest.jks" -outFile "result\app1-profile.p7b" -keyPwd "123456" -keystorePwd "123456"
+	cmd := exec.Command("java",
+		"-jar", "hap-sign-tool.jar",
+		"sign-profile", "-keyAlias", alias,
+		"-signAlg", "SHA256withECDSA",
+		"-mode", "localSign",
+		"-profileCertFile", cert,
+		"-inFile", profile,
+		"-keystoreFile", keystorePath,
+		"-outFile", profile,
+		"-keyPwd", password,
+		"-keystorePwd", password,
+	)
+	fmt.Println("Signing profile...")
+	output, err := cmd.CombinedOutput()
+	// print the output
+	fmt.Println(string(output))
+	if err != nil {
+		return fmt.Errorf("error signing profile: %v, output: %s", err, output)
 	}
-	// https://gitee.com/openharmony/developtools_hapsigner
+	return nil
+}
+
+func signApp(unsignedPath, signedPath, keystorePath, alias, password, profile, cert string) error {
 	// java -jar hap-sign-tool.jar sign-app -keyAlias "oh-app1-key-v1" -signAlg "SHA256withECDSA" -mode "localSign" -appCertFile "result\app1.pem" -profileFile "result\app1-profile.p7b" -inFile "app1-unsigned.zip" -keystoreFile "result\ohtest.jks" -outFile "result\app1-unsigned.hap" -keyPwd "123456" -keystorePwd "123456" -signCode "1"
 	cmd := exec.Command("java",
 		"-jar", "hap-sign-tool.jar",

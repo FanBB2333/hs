@@ -15,8 +15,14 @@ func main() {
 		return
 	}
 	// 3. Request a release cert and profile
-	cert, profile := prepareCert()
-	sign(localHap, signedPath, csrPath, alias, password, profile, cert)
+	certInput, profileInput := prepareCert()
+	certInput = defaultIfEmpty(certInput, cert)
+	profileInput = defaultIfEmpty(profileInput, profile)
+	err = signApp(localHap, signedPath, csrPath, alias, password, profileInput, certInput)
+	if err != nil {
+		fmt.Println("Error signing Hap: ", err)
+		return
+	}
 	// install the hap file using installHap
 	err = installHap(localHap)
 	if err != nil {

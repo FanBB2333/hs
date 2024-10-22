@@ -87,3 +87,10 @@ func downloadFile(url string, filepath string) error {
 
 	return nil
 }
+
+func defaultIfEmpty(input, defaultValue string) string {
+	if input == "" {
+		return defaultValue
+	}
+	return input
+}
