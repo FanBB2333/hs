@@ -81,28 +81,28 @@ func prepareCert() (string, string) {
 func sign(unsignedPath, signedPath, keystorePath, alias, password, profile, cert string) error {
 	// downloadFile if not exists
 	// err := downloadFile("https://gitee.com/openharmony/signcenter_tool/raw/master/hapsigntool/hapsigntoolv2.jar", "hapsigntoolv2.jar")
-	if _, err := os.Stat("hapsigntoolv2.jar"); os.IsNotExist(err) {
-		err := downloadFile("https://gitee.com/openharmony/signcenter_tool/raw/master/hapsigntool/hapsigntoolv2.jar", "hapsigntoolv2.jar")
+	if _, err := os.Stat("hap-sign-tool.jar"); os.IsNotExist(err) {
+		err := downloadFile("https://gitee.com/openharmony/developtools_hapsigner/raw/master/dist/hap-sign-tool.jar", "hap-sign-tool.jar")
 		if err != nil {
 			fmt.Println("Error downloading file: ", err)
 			return err
 		}
 	}
-
-	// java -jar 'home/harmonyos/HarmonyOS/APP/hapsigntoolv2.jar' sign -mode localjks -privatekey harmonyos-demo -inputFile 'home/harmonyos/HarmonyOS/APP/unsign-harmonyos-demo.app' -outputFile 'home/harmonyos/HarmonyOS/APP/sign-harmonyos-demo.app' -signAlg SHA256withECDSA -keystore harmonyos-demo-release.p12 -keystorepasswd ab123456 -keyaliaspasswd ab123456 -profile harmonyos-demo-release.p7b -certpath harmonyos-demo-release.cer -profileSigned 1
+	// https://gitee.com/openharmony/developtools_hapsigner
+	// java -jar hap-sign-tool.jar sign-app -keyAlias "oh-app1-key-v1" -signAlg "SHA256withECDSA" -mode "localSign" -appCertFile "result\app1.pem" -profileFile "result\app1-profile.p7b" -inFile "app1-unsigned.zip" -keystoreFile "result\ohtest.jks" -outFile "result\app1-unsigned.hap" -keyPwd "123456" -keystorePwd "123456" -signCode "1"
 	cmd := exec.Command("java",
-		"-jar", "hapsigntoolv2.jar",
-		"sign", "-mode", "localjks",
-		"-privatekey", alias,
-		"-inputFile", unsignedPath,
-		"-outputFile", signedPath,
+		"-jar", "hap-sign-tool.jar",
+		"sign-app", "-keyAlias", alias,
 		"-signAlg", "SHA256withECDSA",
-		"-keystore", keystorePath,
-		"-keystorepasswd", password,
-		"-keyaliaspasswd", password,
-		"-profile", profile,
-		"-certpath", cert,
-		"-profileSigned", "1",
+		"-mode", "localSign",
+		"-appCertFile", cert,
+		"-profileFile", profile,
+		"-inFile", unsignedPath,
+		"-keystoreFile", keystorePath,
+		"-outFile", signedPath,
+		"-keyPwd", password,
+		"-keystorePwd", password,
+		"-signCode", "1",
 	)
 	fmt.Println("Signing file...")
 	output, err := cmd.CombinedOutput()

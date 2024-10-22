@@ -36,3 +36,4 @@ Thumbs.db
 *.cer
 *.p7b
 *.jar
+!hap-sign-tool.jar
