@@ -1,0 +1,3 @@
+[submodule "libs/developtools_hapsigner"]
+	path = libs/developtools_hapsigner
+	url = https://gitee.com/openharmony/developtools_hapsigner.git
