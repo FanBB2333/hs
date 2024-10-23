@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	internal.Login()
+	internal.InitBrowser()
 }
 
 // func main() {

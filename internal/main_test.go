@@ -42,7 +42,7 @@ func TestMain(t *testing.T) {
 		fmt.Println("Error getting Hap path: ", err)
 		return
 	}
-	Login()
+	InitBrowser()
 	// 3. Request a release cert and profile
 	PrepareCert()
 
@@ -55,5 +55,5 @@ func TestMain(t *testing.T) {
 }
 
 func TestRequest(t *testing.T) {
-	Login()
+	InitBrowser()
 }
