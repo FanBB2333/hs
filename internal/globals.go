@@ -1,10 +1,10 @@
 // globals.go
 package internal
 
-var password string = "12345678"
-var keystorePath string = "hs.p12"
-var csrPath string = "hs.csr"
-var alias string = "hs"
-var signedPath string = "signed.hap"
-var profile string = "profile.p7b"
-var cert string = "cert.cer"
+var Password string = "12345678"
+var KeystorePath string = "hs.p12"
+var CsrPath string = "hs.csr"
+var Alias string = "hs"
+var SignedPath string = "signed.hap"
+var Profile string = "profile.p7b"
+var Cert string = "cert.cer"

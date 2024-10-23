@@ -52,24 +52,24 @@ func generateCSRFile(keystorePath, alias, outputPath, password string) error {
 	return nil
 }
 
-func prepareSign() {
+func PrepareSign() {
 	// assign the password to a var
-	generateP12File(keystorePath, alias, password)
-	generateCSRFile(keystorePath, alias, csrPath, password)
+	generateP12File(KeystorePath, Alias, Password)
+	generateCSRFile(KeystorePath, Alias, CsrPath, Password)
 }
 
-func prepareCert() (string, string) {
+func PrepareCert() (string, string) {
 	// login()
 	// Requests are online operations
 	// 1. Request a release cert, prompt the user to input the path of cer file
-	certPath, err := promptPath("Input the path of the cer file (Ends with '.cer'): ")
+	certPath, err := PromptPath("Input the path of the cer file (Ends with '.cer'): ")
 	if err != nil {
 		fmt.Println("Error getting cer path: ", err)
 		return "", ""
 	}
 	// https: //developer.huawei.com/consumer/cn/doc/harmonyos-guides-V3/command-line-building-app-hap-0000001193655754-V3
 	// 2. Request a release profile
-	profilePath, err := promptPath("Input the path of the profile file (Ends with '.p7b'): ")
+	profilePath, err := PromptPath("Input the path of the profile file (Ends with '.p7b'): ")
 	if err != nil {
 		fmt.Println("Error getting profile path: ", err)
 		return "", ""
@@ -83,15 +83,15 @@ func signProfile() error {
 	// java -jar hap-sign-tool.jar  sign-profile -keyAlias "oh-profile1-key-v1" -signAlg "SHA256withECDSA" -mode "localSign" -profileCertFile "result\profile1.pem" -inFile "app1-profile-release.json" -keystoreFile "result\ohtest.jks" -outFile "result\app1-profile.p7b" -keyPwd "123456" -keystorePwd "123456"
 	cmd := exec.Command("java",
 		"-jar", "hap-sign-tool.jar",
-		"sign-profile", "-keyAlias", alias,
+		"sign-profile", "-keyAlias", Alias,
 		"-signAlg", "SHA256withECDSA",
 		"-mode", "localSign",
-		"-profileCertFile", cert,
-		"-inFile", profile,
-		"-keystoreFile", keystorePath,
-		"-outFile", profile,
-		"-keyPwd", password,
-		"-keystorePwd", password,
+		"-profileCertFile", Cert,
+		"-inFile", Profile,
+		"-keystoreFile", KeystorePath,
+		"-outFile", Profile,
+		"-keyPwd", Password,
+		"-keystorePwd", Password,
 	)
 	fmt.Println("Signing profile...")
 	output, err := cmd.CombinedOutput()
@@ -103,7 +103,7 @@ func signProfile() error {
 	return nil
 }
 
-func signApp(unsignedPath, signedPath, keystorePath, alias, password, profile, cert string) error {
+func SignApp(unsignedPath, signedPath, keystorePath, alias, password, profile, cert string) error {
 	// java -jar hap-sign-tool.jar sign-app -keyAlias "oh-app1-key-v1" -signAlg "SHA256withECDSA" -mode "localSign" -appCertFile "result\app1.pem" -profileFile "result\app1-profile.p7b" -inFile "app1-unsigned.zip" -keystoreFile "result\ohtest.jks" -outFile "result\app1-unsigned.hap" -keyPwd "123456" -keystorePwd "123456" -signCode "1"
 	cmd := exec.Command("java",
 		"-jar", "hap-sign-tool.jar",

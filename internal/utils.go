@@ -23,7 +23,7 @@ func generateRandomFileName(length int) string {
 	return string(fileName)
 }
 
-func promptPath(prompt string) (string, error) {
+func PromptPath(prompt string) (string, error) {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(prompt)
 
@@ -65,7 +65,7 @@ func downloadFile(url string, filepath string) error {
 	return nil
 }
 
-func defaultIfEmpty(input, defaultValue string) string {
+func DefaultIfEmpty(input, defaultValue string) string {
 	if input == "" {
 		return defaultValue
 	}

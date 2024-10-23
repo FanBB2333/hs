@@ -73,7 +73,7 @@ func checkConnection() ([]Device, error) {
 	return devices, nil
 }
 
-func installHap(localHap string) error {
+func InstallHap(localHap string) error {
 	_, err := executeHDC("install", localHap)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func installHap(localHap string) error {
 	return nil
 }
 
-func installHapOld(localHap string) error {
+func InstallHapOld(localHap string) error {
 	// prepare the target dir
 	tmpDir := generateRandomFileName(8)
 	remoteHap := "data/local/tmp/" + tmpDir
