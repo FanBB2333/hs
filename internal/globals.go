@@ -1,5 +1,5 @@
 // globals.go
-package main
+package internal
 
 var password string = "12345678"
 var keystorePath string = "hs.p12"

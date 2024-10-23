@@ -1,5 +1,5 @@
 // AppGallery Connect Requests
-package main
+package internal
 
 import (
 	"fmt"
